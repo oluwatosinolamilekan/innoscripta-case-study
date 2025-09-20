@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ArticleController;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\SourceController;
 use App\Http\Controllers\Api\TestController;
 use App\Http\Controllers\Api\UserPreferenceController;
@@ -18,6 +19,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Authentication routes
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
+
 // Public routes
 Route::get('/articles', [ArticleController::class, 'index']);
 Route::get('/articles/search', [ArticleController::class, 'search']);
@@ -32,6 +37,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+    
+    // Authentication
+    Route::post('/logout', [AuthController::class, 'logout']);
     
     // User preferences
     Route::get('/preferences', [UserPreferenceController::class, 'index']);

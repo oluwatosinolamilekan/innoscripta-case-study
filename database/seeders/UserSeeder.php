@@ -17,14 +17,14 @@ class UserSeeder extends Seeder
         User::factory()->create([
             'name' => 'John Doe',
             'email' => 'john@example.com',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('Password123!'),
         ]);
 
        
         User::factory()->create([
             'name' => 'Admin User',
             'email' => 'admin@example.com',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('Admin123#'),
         ]);
     }
 }

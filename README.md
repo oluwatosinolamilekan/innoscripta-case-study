@@ -113,10 +113,17 @@ php artisan db:seed --class=UserSeeder
 This will create the following test users:
 - Regular User:
   - Email: john@example.com
-  - Password: password
+  - Password: Password123!
 - Admin User:
   - Email: admin@example.com
-  - Password: password
+  - Password: Admin123#
+
+Note: Passwords must meet the following requirements:
+- Minimum 8 characters
+- At least one uppercase letter
+- At least one lowercase letter
+- At least one number
+- At least one special character
 
 ## Usage
 
@@ -212,7 +219,7 @@ A Postman collection is included in the repository to help you test the API endp
   - Body parameters:
     - `name` - User name
     - `email` - User email
-    - `password` - User password
+    - `password` - User password (must contain at least 8 characters with uppercase, lowercase, numbers, and symbols)
     - `password_confirmation` - Password confirmation
 
 - `POST /api/logout` - Logout and invalidate the current token (requires authentication)
