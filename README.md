@@ -105,6 +105,19 @@ NYT_API_KEY=your_nyt_api_key
 NYT_API_SECRET=your_nyt_api_secret
 ```
 
+9. Seed the database with default users:
+```
+php artisan db:seed --class=UserSeeder
+```
+
+This will create the following test users:
+- Regular User:
+  - Email: john@example.com
+  - Password: password
+- Admin User:
+  - Email: admin@example.com
+  - Password: password
+
 ## Usage
 
 ### Running the Application

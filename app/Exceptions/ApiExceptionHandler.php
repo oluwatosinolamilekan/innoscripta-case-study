@@ -60,8 +60,8 @@ class ApiExceptionHandler
     protected function getMessage(Throwable $exception): string
     {
         return match(true) {
-            $exception instanceof NotFoundHttpException => 'The requested resource was not found',
-            $exception instanceof ValidationException => 'The given data was invalid',
+            $exception instanceof NotFoundHttpException => $exception->getMessage() ?: 'The requested resource was not found',
+            $exception instanceof ValidationException => $exception->getMessage() ?: 'The given data was invalid',
             $exception instanceof HttpExceptionInterface => $exception->getMessage() ?: 'Error',
             default => config('app.debug') ? $exception->getMessage() : 'Server Error'
         };
