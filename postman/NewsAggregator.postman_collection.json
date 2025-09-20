@@ -1,0 +1,563 @@
+{
+	"info": {
+		"_postman_id": "e5f0d7b3-8d5c-4d1e-b1f0-9f8a7e4c5b3a",
+		"name": "News Aggregator API",
+		"description": "API collection for the News Aggregator backend service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Articles",
+			"item": [
+				{
+					"name": "Get All Articles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/articles?page=1&per_page=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"articles"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "technology",
+									"description": "Search term",
+									"disabled": true
+								},
+								{
+									"key": "source_id",
+									"value": "1",
+									"description": "Filter by source ID",
+									"disabled": true
+								},
+								{
+									"key": "category",
+									"value": "technology",
+									"description": "Filter by category",
+									"disabled": true
+								},
+								{
+									"key": "author",
+									"value": "John Doe",
+									"description": "Filter by author",
+									"disabled": true
+								},
+								{
+									"key": "date_from",
+									"value": "2023-01-01",
+									"description": "Filter by date (from)",
+									"disabled": true
+								},
+								{
+									"key": "date_to",
+									"value": "2023-12-31",
+									"description": "Filter by date (to)",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number"
+								},
+								{
+									"key": "per_page",
+									"value": "10",
+									"description": "Number of articles per page"
+								}
+							]
+						},
+						"description": "Get all articles with optional filtering"
+					},
+					"response": []
+				},
+				{
+					"name": "Search Articles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/articles/search?query=technology&page=1&per_page=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"articles",
+								"search"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "technology",
+									"description": "Search term (required)"
+								},
+								{
+									"key": "source_id",
+									"value": "1",
+									"description": "Filter by source ID",
+									"disabled": true
+								},
+								{
+									"key": "category",
+									"value": "technology",
+									"description": "Filter by category",
+									"disabled": true
+								},
+								{
+									"key": "author",
+									"value": "John Doe",
+									"description": "Filter by author",
+									"disabled": true
+								},
+								{
+									"key": "date_from",
+									"value": "2023-01-01",
+									"description": "Filter by date (from)",
+									"disabled": true
+								},
+								{
+									"key": "date_to",
+									"value": "2023-12-31",
+									"description": "Filter by date (to)",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number"
+								},
+								{
+									"key": "per_page",
+									"value": "10",
+									"description": "Number of articles per page"
+								}
+							]
+						},
+						"description": "Search articles by keywords"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Article Categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/articles/categories",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"articles",
+								"categories"
+							]
+						},
+						"description": "Get all article categories"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Article Authors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/articles/authors",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"articles",
+								"authors"
+							]
+						},
+						"description": "Get all article authors"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints for retrieving and searching articles"
+		},
+		{
+			"name": "Sources",
+			"item": [
+				{
+					"name": "Get All Sources",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/sources",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"sources"
+							]
+						},
+						"description": "Get all news sources"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Articles by Source",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/sources/1/articles?page=1&per_page=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"sources",
+								"1",
+								"articles"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "technology",
+									"description": "Search term",
+									"disabled": true
+								},
+								{
+									"key": "category",
+									"value": "technology",
+									"description": "Filter by category",
+									"disabled": true
+								},
+								{
+									"key": "author",
+									"value": "John Doe",
+									"description": "Filter by author",
+									"disabled": true
+								},
+								{
+									"key": "date_from",
+									"value": "2023-01-01",
+									"description": "Filter by date (from)",
+									"disabled": true
+								},
+								{
+									"key": "date_to",
+									"value": "2023-12-31",
+									"description": "Filter by date (to)",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number"
+								},
+								{
+									"key": "per_page",
+									"value": "10",
+									"description": "Number of articles per page"
+								}
+							]
+						},
+						"description": "Get articles from a specific source"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints for retrieving sources and their articles"
+		},
+		{
+			"name": "User Preferences",
+			"item": [
+				{
+					"name": "Get User Preferences",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/preferences",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"preferences"
+							]
+						},
+						"description": "Get the authenticated user's preferences"
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Preferences",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"preferred_sources\": [1, 2, 3],\n    \"preferred_categories\": [\"technology\", \"business\", \"health\"],\n    \"preferred_authors\": [\"John Doe\", \"Jane Smith\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/preferences",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"preferences"
+							]
+						},
+						"description": "Update the authenticated user's preferences"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Articles Based on Preferences",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/preferences/articles?page=1&per_page=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"preferences",
+								"articles"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "technology",
+									"description": "Search term",
+									"disabled": true
+								},
+								{
+									"key": "date_from",
+									"value": "2023-01-01",
+									"description": "Filter by date (from)",
+									"disabled": true
+								},
+								{
+									"key": "date_to",
+									"value": "2023-12-31",
+									"description": "Filter by date (to)",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number"
+								},
+								{
+									"key": "per_page",
+									"value": "10",
+									"description": "Number of articles per page"
+								}
+							]
+						},
+						"description": "Get articles based on user preferences"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints for managing user preferences (requires authentication)"
+		},
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"user@example.com\",\n    \"password\": \"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						},
+						"description": "Login to get an authentication token"
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"user@example.com\",\n    \"password\": \"password\",\n    \"password_confirmation\": \"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"register"
+							]
+						},
+						"description": "Register a new user"
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/logout",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"logout"
+							]
+						},
+						"description": "Logout and invalidate the current token"
+					},
+					"response": []
+				},
+				{
+					"name": "Get User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/user",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"user"
+							]
+						},
+						"description": "Get the authenticated user's details"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints for user authentication"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		},
+		{
+			"key": "auth_token",
+			"value": "your_auth_token_here",
+			"type": "string"
+		}
+	]
+}
