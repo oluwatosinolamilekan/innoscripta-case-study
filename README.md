@@ -79,13 +79,17 @@ php artisan key:generate
 
 5. Configure your database in the `.env` file:
 ```
-DB_CONNECTION=sqlite
-DB_DATABASE=database/database.sqlite
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=innoscripta
+DB_USERNAME=your_mysql_username
+DB_PASSWORD=your_mysql_password
 ```
 
-6. Create the SQLite database file:
+6. Create the MySQL database:
 ```
-touch database/database.sqlite
+mysql -u your_mysql_username -p -e "CREATE DATABASE innoscripta"
 ```
 
 7. Run migrations:
