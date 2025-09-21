@@ -42,7 +42,7 @@ A Laravel-based backend service that aggregates news articles from multiple sour
 - PHP 8.1 or higher
 - Composer
 - Laravel 12.x
-- SQLite (or other database of your choice)
+- MySQL
 - API keys for the news sources
 
 ## Installation
@@ -51,7 +51,7 @@ This script will:
 1. Install dependencies
 2. Create the .env file
 3. Generate an application key
-4. Create the SQLite database
+4. Create the MySQL database
 5. Run migrations
 6. Prompt you for API keys and update the .env file
 
@@ -59,7 +59,7 @@ This script will:
 1. Clone the repository:
 ```
 git clone 
-cd innoscripta
+cd innoscripta-case-study
 ```
 
 2. Install dependencies:
