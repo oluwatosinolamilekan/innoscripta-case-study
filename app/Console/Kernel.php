@@ -14,16 +14,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // Fetch articles from news sources every hour
-        $schedule->call(function () {
-            $aggregator = app(NewsAggregatorService::class);
-            $aggregator->getArticles();
-        })->hourly();
+        $schedule->command('news:fetch')->hourly();
 
         // Update sources once a day
-        $schedule->call(function () {
-            $aggregator = app(NewsAggregatorService::class);
-            $aggregator->getSources();
-        })->daily();
+        $schedule->command('news:fetch-sources')->daily();
     }
 
     /**

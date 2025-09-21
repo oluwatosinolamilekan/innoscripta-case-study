@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Api\BaseApiController as Controller;
+use Throwable;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Http\Resources\ArticleResource;
+use App\Services\NewsAggregatorService;
+use App\Http\Resources\CategoryResource;
+use App\Http\Resources\ArticleCollection;
 use App\Http\Requests\ArticleFilterRequest;
 use App\Http\Requests\ArticleSearchRequest;
-use App\Http\Resources\ArticleCollection;
-use App\Http\Resources\ArticleResource;
-use App\Http\Resources\CategoryResource;
-use App\Services\NewsAggregatorService;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\BaseApiController as Controller;
 
 class ArticleController extends Controller
 {
@@ -44,7 +45,7 @@ class ArticleController extends Controller
             $filters = $request->validated();
             $articles = $this->aggregator->getArticlesFromDatabase($filters);
             return new ArticleCollection($articles);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return $this->handleException($e);
         }
     }
@@ -66,7 +67,7 @@ class ArticleController extends Controller
             $articles = $this->aggregator->getArticlesFromDatabase($filters);
 
             return new ArticleCollection($articles);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return $this->handleException($e);
         }
     }
@@ -81,7 +82,7 @@ class ArticleController extends Controller
         try {
             $categories = $this->aggregator->getCategoriesFromDatabase();
             return $this->successResponse(CategoryResource::collection($categories));
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return $this->handleException($e);
         }
     }
@@ -96,7 +97,7 @@ class ArticleController extends Controller
         try {
             $authors = $this->aggregator->getAuthorsFromDatabase();
             return $this->successResponse($authors);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return $this->handleException($e);
         }
     }

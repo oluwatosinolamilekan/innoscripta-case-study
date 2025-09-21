@@ -9,15 +9,22 @@ use Illuminate\Support\Facades\Log;
 class GuardianApiService extends BaseNewsSource
 {
     /**
+     * The base URL for Guardian API.
+     *
+     * @var string
+     */
+    private const BASE_URL = 'https://content.guardianapis.com';
+
+    /**
      * Create a new Guardian API service instance.
      *
      * @param string|null $apiKey
      * @return void
      */
-    public function __construct(string $apiKey = null)
+    public function __construct(?string $apiKey = null)
     {
         parent::__construct($apiKey ?? config('services.guardian.key'));
-        $this->baseUrl = 'https://content.guardianapis.com';
+        $this->baseUrl = self::BASE_URL;
     }
 
     /**
@@ -55,16 +62,20 @@ class GuardianApiService extends BaseNewsSource
             }
 
             $data = $response->json();
+            
+            // Log the API response to a JSON file with request parameters
+            $this->logResponseToJson('articles', $data, [
+                'request' => [
+                    'params' => $params,
+                    'endpoint' => '/search',
+                    'method' => 'GET'
+                ]
+            ]);
+         
             $articles = [];
 
             // Get or create the source
-            $source = Source::firstOrCreate([
-                'slug' => 'the-guardian',
-                'api_name' => $this->getSourceName(),
-            ], [
-                'name' => $this->getSourceName(),
-                'url' => 'https://www.theguardian.com',
-            ]);
+            $source = $this->getOrCreateSource('the-guardian', 'https://www.theguardian.com');
 
             foreach ($data['response']['results'] as $article) {
                 $articles[] = [
@@ -148,16 +159,19 @@ class GuardianApiService extends BaseNewsSource
             }
 
             $data = $response->json();
+            
+            // Log the API response to a JSON file with request parameters
+            $this->logResponseToJson('articles', $data, [
+                'request' => [
+                    'params' => $params,
+                    'endpoint' => '/search',
+                    'method' => 'GET'
+                ]
+            ]);
             $articles = [];
 
             // Get or create the source
-            $source = Source::firstOrCreate([
-                'slug' => 'the-guardian',
-                'api_name' => $this->getSourceName(),
-            ], [
-                'name' => $this->getSourceName(),
-                'url' => 'https://www.theguardian.com',
-            ]);
+            $source = $this->getOrCreateSource('the-guardian', 'https://www.theguardian.com');
 
             foreach ($data['response']['results'] as $article) {
                 $articles[] = [

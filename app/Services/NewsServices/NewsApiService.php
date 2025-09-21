@@ -10,15 +10,22 @@ use App\Services\Contracts\BaseNewsSource;
 class NewsApiService extends BaseNewsSource
 {
     /**
+     * The base URL for NewsAPI.
+     *
+     * @var string
+     */
+    private const BASE_URL = 'https://newsapi.org/v2';
+
+    /**
      * Create a new NewsAPI service instance.
      *
      * @param string|null $apiKey
      * @return void
      */
-    public function __construct(string $apiKey = null)
+    public function __construct(?string $apiKey = null)
     {
         parent::__construct($apiKey ?? config('services.news_api.key'));
-        $this->baseUrl = 'https://newsapi.org/v2';
+        $this->baseUrl = self::BASE_URL;
     }
 
     /**
@@ -30,6 +37,25 @@ class NewsApiService extends BaseNewsSource
     {
         return 'NewsAPI';
     }
+    
+    /**
+     * Get or create a source for a specific publication from NewsAPI.
+     *
+     * @param array $sourceData Source data from the API
+     * @return \App\Models\Source
+     */
+    protected function getOrCreateArticleSource(array $sourceData): Source
+    {
+        $sourceName = $sourceData['name'] ?? 'Unknown';
+        
+        return Source::firstOrCreate([
+            'slug' => Str::slug($sourceName),
+            'api_name' => $this->getSourceName(),
+        ], [
+            'name' => $sourceName,
+            'api_id' => $sourceData['id'] ?? null,
+        ]);
+    }
 
     /**
      * Get articles from NewsAPI.
@@ -40,6 +66,7 @@ class NewsApiService extends BaseNewsSource
     public function getArticles(array $params = []): array
     {
         try {
+            // everything
             $response = $this->http->withHeaders([
                 'X-Api-Key' => $this->apiKey,
             ])->get($this->baseUrl . '/top-headlines', array_merge([
@@ -56,27 +83,24 @@ class NewsApiService extends BaseNewsSource
             }
 
             $data = $response->json();
+            
+            // Log the API response to a JSON file with request parameters
+            $this->logResponseToJson('articles', $data, [
+                'request' => [
+                    'params' => $params,
+                    'endpoint' => '/top-headlines',
+                    'method' => 'GET',
+                    'headers' => ['X-Api-Key' => '***API_KEY_HIDDEN***']
+                ]
+            ]);
             $articles = [];
 
             // Get or create the source
-            $source = Source::firstOrCreate([
-                'slug' => 'newsapi',
-                'api_name' => $this->getSourceName(),
-            ], [
-                'name' => $this->getSourceName(),
-            ]);
+            $source = $this->getOrCreateSource('newsapi');
 
             foreach ($data['articles'] as $article) {
-                $sourceName = $article['source']['name'] ?? 'Unknown';
-                
                 // Create a source for this specific publication if it doesn't exist
-                $articleSource = Source::firstOrCreate([
-                    'slug' => Str::slug($sourceName),
-                    'api_name' => $this->getSourceName(),
-                ], [
-                    'name' => $sourceName,
-                    'api_id' => $article['source']['id'] ?? null,
-                ]);
+                $articleSource = $this->getOrCreateArticleSource($article['source']);
 
                 $articles[] = [
                     'title' => $article['title'],
@@ -103,6 +127,8 @@ class NewsApiService extends BaseNewsSource
         }
     }
 
+
+
     /**
      * Get sources from NewsAPI.
      *
@@ -125,6 +151,16 @@ class NewsApiService extends BaseNewsSource
             }
 
             $data = $response->json();
+            
+            // Log the API response to a JSON file with request parameters
+            $this->logResponseToJson('articles', $data, [
+                'request' => [
+                    'params' => $params,
+                    'endpoint' => '/top-headlines',
+                    'method' => 'GET',
+                    'headers' => ['X-Api-Key' => '***API_KEY_HIDDEN***']
+                ]
+            ]);
             $sources = [];
 
             foreach ($data['sources'] as $source) {
@@ -178,27 +214,24 @@ class NewsApiService extends BaseNewsSource
             }
 
             $data = $response->json();
+            
+            // Log the API response to a JSON file with request parameters
+            $this->logResponseToJson('articles', $data, [
+                'request' => [
+                    'params' => $params,
+                    'endpoint' => '/top-headlines',
+                    'method' => 'GET',
+                    'headers' => ['X-Api-Key' => '***API_KEY_HIDDEN***']
+                ]
+            ]);
             $articles = [];
 
             // Get or create the source
-            $source = Source::firstOrCreate([
-                'slug' => 'newsapi',
-                'api_name' => $this->getSourceName(),
-            ], [
-                'name' => $this->getSourceName(),
-            ]);
+            $source = $this->getOrCreateSource('newsapi');
 
             foreach ($data['articles'] as $article) {
-                $sourceName = $article['source']['name'] ?? 'Unknown';
-                
                 // Create a source for this specific publication if it doesn't exist
-                $articleSource = Source::firstOrCreate([
-                    'slug' => Str::slug($sourceName),
-                    'api_name' => $this->getSourceName(),
-                ], [
-                    'name' => $sourceName,
-                    'api_id' => $article['source']['id'] ?? null,
-                ]);
+                $articleSource = $this->getOrCreateArticleSource($article['source']);
 
                 $articles[] = [
                     'title' => $article['title'],

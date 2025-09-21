@@ -40,7 +40,7 @@ abstract class BaseNewsSource implements NewsSourceInterface
      * @param string $apiKey
      * @return void
      */
-    public function __construct(string $apiKey = null)
+    public function __construct(?string $apiKey = null)
     {
         $this->http = Http::timeout(30);
         $this->apiKey = $apiKey;
@@ -144,6 +144,120 @@ abstract class BaseNewsSource implements NewsSourceInterface
                 'exception' => $e,
             ]);
             return now()->toDateTimeString();
+        }
+    }
+
+    /**
+     * Get or create a source for this news service.
+     *
+     * @param string|null $slug Custom slug (optional)
+     * @param string|null $url Source URL (optional)
+     * @return \App\Models\Source
+     */
+    protected function getOrCreateSource(?string $slug = null, ?string $url = null): Source
+    {
+        $sourceName = $this->getSourceName();
+        $sourceSlug = $slug ?? Str::slug($sourceName);
+        
+        return Source::firstOrCreate([
+            'slug' => $sourceSlug,
+            'api_name' => $sourceName,
+        ], [
+            'name' => $sourceName,
+            'url' => $url,
+        ]);
+    }
+
+    /**
+     * Log API response data to a JSON file with source metadata.
+     *
+     * @param string $endpoint The API endpoint or identifier
+     * @param array $data The data to log
+     * @param array $additionalMetadata Additional metadata to include in the log
+     * @return bool Whether the log was successful
+     */
+    protected function logResponseToJson(string $endpoint, array $data, array $additionalMetadata = []): bool
+    {
+        try {
+            $sourceName = $this->getSourceName();
+            $timestamp = now()->format('Y-m-d_H-i-s');
+            $directory = storage_path('logs/api_responses');
+            
+            // Create directory if it doesn't exist
+            if (!file_exists($directory)) {
+                mkdir($directory, 0755, true);
+            }
+            
+            $filename = "{$directory}/{$sourceName}_{$endpoint}_{$timestamp}.json";
+            
+            // Prepare metadata
+            $metadata = [
+                'source' => [
+                    'name' => $sourceName,
+                    'base_url' => $this->baseUrl,
+                    'endpoint' => $endpoint,
+                ],
+                'timestamp' => now()->toIso8601String(),
+                'request_time' => now()->format('Y-m-d H:i:s'),
+            ];
+            
+            // Add any additional metadata
+            if (!empty($additionalMetadata)) {
+                $metadata = array_merge($metadata, $additionalMetadata);
+            }
+            
+            // Combine metadata with the response data
+            $logData = [
+                'metadata' => $metadata,
+                'response_data' => $data,
+            ];
+            
+            // Write data to file with pretty print
+            file_put_contents(
+                $filename, 
+                json_encode($logData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
+            );
+            
+            $relativePath = str_replace(base_path() . '/', '', $filename);
+            Log::info("API response logged to file: {$filename}");
+            
+            // Output to console if running in CLI
+            if (app()->runningInConsole()) {
+                $this->outputToConsole("API response logged to: {$relativePath}");
+            }
+            
+            return true;
+        } catch (Exception $e) {
+            Log::error("Failed to log API response: {$e->getMessage()}", [
+                'exception' => $e,
+                'source' => $this->getSourceName(),
+                'endpoint' => $endpoint
+            ]);
+            return false;
+        }
+    }
+
+    /**
+     * Output a message to the console if running in CLI mode.
+     *
+     * @param string $message The message to output
+     * @return void
+     */
+    protected function outputToConsole(string $message): void
+    {
+        if (app()->runningInConsole()) {
+            // Check if we're in a Laravel command context
+            if (isset($_SERVER['argv'][0]) && strpos($_SERVER['argv'][0], 'artisan') !== false) {
+                // If we're in an Artisan command, try to use the command's output methods
+                $command = app('Illuminate\Console\Command');
+                if ($command) {
+                    $command->info($message);
+                    return;
+                }
+            }
+            
+            // Fallback to plain echo
+            echo PHP_EOL . $message . PHP_EOL;
         }
     }
 }

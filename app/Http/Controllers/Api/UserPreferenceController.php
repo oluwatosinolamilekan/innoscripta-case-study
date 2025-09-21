@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Api\BaseApiController as Controller;
-use App\Http\Requests\ArticleFilterRequest;
-use App\Http\Requests\UserPreferenceRequest;
-use App\Http\Resources\ArticleCollection;
-use App\Http\Resources\UserPreferenceResource;
+use Throwable;
 use App\Models\Article;
+use Illuminate\Http\Request;
 use App\Models\UserPreference;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\ArticleCollection;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\ArticleFilterRequest;
+use App\Http\Requests\UserPreferenceRequest;
+use App\Http\Resources\UserPreferenceResource;
+use App\Http\Controllers\Api\BaseApiController as Controller;
 
 class UserPreferenceController extends Controller
 {
@@ -28,7 +29,7 @@ class UserPreferenceController extends Controller
             $preferences = $user->preference ?? UserPreference::create(['user_id' => $user->id]);
             
             return $this->successResponse(new UserPreferenceResource($preferences));
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return $this->handleException($e);
         }
     }
@@ -60,7 +61,7 @@ class UserPreferenceController extends Controller
                 new UserPreferenceResource($preferences),
                 'Preferences updated successfully.'
             );
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return $this->handleException($e);
         }
     }
@@ -81,39 +82,15 @@ class UserPreferenceController extends Controller
                 return $this->successResponse([], 'No preferences set.');
             }
 
-            $query = Article::with('source')->orderBy('published_at', 'desc');
-
-            // Apply user preferences
-            if (!empty($preferences->preferred_sources)) {
-                $query->whereIn('source_id', $preferences->preferred_sources);
-            }
-
-            if (!empty($preferences->preferred_categories)) {
-                $query->whereIn('category', $preferences->preferred_categories);
-            }
-
-            if (!empty($preferences->preferred_authors)) {
-                $query->where(function ($q) use ($preferences) {
-                    foreach ($preferences->preferred_authors as $author) {
-                        $q->orWhere('author', 'like', '%' . $author . '%');
-                    }
-                });
-            }
+            $query = Article::with('source')
+                ->applyUserPreferences($preferences)
+                ->orderBy('published_at', 'desc');
 
             // Apply additional filters
             $filters = $request->validated();
-
-            if (!empty($filters['search'])) {
-                $query->whereFullText(['title', 'description'], $filters['search']);
-            }
-
-            if (!empty($filters['date_from'])) {
-                $query->where('published_at', '>=', $filters['date_from']);
-            }
-
-            if (!empty($filters['date_to'])) {
-                $query->where('published_at', '<=', $filters['date_to']);
-            }
+            
+            // Apply filters using the model scope
+            $query->applyFilters($filters);
 
             // Apply pagination
             $perPage = $filters['per_page'] ?? 15;
@@ -122,7 +99,7 @@ class UserPreferenceController extends Controller
             $articles = $query->paginate($perPage, ['*'], 'page', $page);
 
             return new ArticleCollection($articles);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return $this->handleException($e);
         }
     }

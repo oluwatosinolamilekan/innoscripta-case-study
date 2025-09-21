@@ -24,10 +24,12 @@ class FetchSourcesCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle(NewsAggregatorService $aggregator)
+    public function handle()
     {
         $this->info('Fetching sources from news APIs...');
 
+        // Create aggregator with sources from factory
+        $aggregator = NewsAggregatorService::createWithDefaultSources();
         $sources = $aggregator->getSources();
 
         $this->info('Fetched ' . count($sources) . ' sources.');

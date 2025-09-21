@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Api\BaseApiController as Controller;
-use App\Http\Requests\ArticleFilterRequest;
-use App\Http\Resources\ArticleCollection;
-use App\Http\Resources\SourceResource;
+use Throwable;
 use App\Models\Source;
-use App\Services\NewsAggregatorService;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Http\Resources\SourceResource;
+use App\Services\NewsAggregatorService;
+use App\Http\Resources\ArticleCollection;
+use App\Http\Requests\ArticleFilterRequest;
+use App\Http\Controllers\Api\BaseApiController as Controller;
 
 class SourceController extends Controller
 {
@@ -41,7 +42,7 @@ class SourceController extends Controller
         try {
             $sources = $this->aggregator->getSourcesFromDatabase();
             return $this->successResponse(SourceResource::collection($sources));
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return $this->handleException($e);
         }
     }
@@ -67,7 +68,7 @@ class SourceController extends Controller
             $articles = $this->aggregator->getArticlesFromDatabase($filters);
 
             return new ArticleCollection($articles);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return $this->handleException($e);
         }
     }

@@ -133,13 +133,29 @@ Note: Passwords must meet the following requirements:
 php artisan serve
 ```
 
-### Fetching Articles Manually
+### Fetching News Data Manually
+
+#### Fetch All News from All Sources
+
+```
+php artisan news:fetch
+```
+
+#### Fetch News from a Specific Source
+
+```
+php artisan news:fetch --source=newsapi    # Fetch from NewsAPI
+php artisan news:fetch --source=guardian   # Fetch from The Guardian
+php artisan news:fetch --source=nyt        # Fetch from New York Times
+```
+
+#### Fetch Articles Only
 
 ```
 php artisan news:fetch-articles
 ```
 
-### Fetching Sources Manually
+#### Fetch Sources Only
 
 ```
 php artisan news:fetch-sources

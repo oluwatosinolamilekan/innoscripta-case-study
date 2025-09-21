@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
-use App\Services\Contracts\NewsSourceInterface;
-use App\Services\NewsServices\GuardianApiService;
+use App\Services\Factories\NewsSourcesFactory;
 use App\Services\NewsAggregatorService;
+use App\Services\NewsServices\GuardianApiService;
 use App\Services\NewsServices\NewsApiService;
 use App\Services\NewsServices\NewYorkTimesApiService;
 use Illuminate\Support\ServiceProvider;
@@ -16,33 +16,27 @@ class NewsServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // Register news sources
-        $this->app->singleton(NewsApiService::class, function ($app) {
-            return new NewsApiService(config('services.news_api.key'));
-        });
+        // Register the factory
+        $this->app->singleton(NewsSourcesFactory::class);
+        
+        // Register individual news sources
+        // $this->app->singleton(NewsApiService::class, function ($app) {
+        //     return NewsSourcesFactory::createNewsApiService();
+        // });
 
         $this->app->singleton(GuardianApiService::class, function ($app) {
-            return new GuardianApiService(config('services.guardian.key'));
+            return NewsSourcesFactory::createGuardianApiService();
         });
 
-        $this->app->singleton(NewYorkTimesApiService::class, function ($app) {
-            return new NewYorkTimesApiService(
-                config('services.nyt.key'),
-                config('services.nyt.secret')
-            );
-        });
+        // $this->app->singleton(NewYorkTimesApiService::class, function ($app) {
+        //     return NewsSourcesFactory::createNewYorkTimesApiService();
+        // });
 
         // Register news aggregator service
-        $this->app->singleton(NewsAggregatorService::class, function ($app) {
-            $aggregator = new NewsAggregatorService();
-            
-            // Add news sources to aggregator
-            $aggregator->addSource($app->make(NewsApiService::class));
-            $aggregator->addSource($app->make(GuardianApiService::class));
-            $aggregator->addSource($app->make(NewYorkTimesApiService::class));
-            
-            return $aggregator;
-        });
+        // $this->app->singleton(NewsAggregatorService::class, function ($app) {
+        //     // Use the static factory method instead of manual wiring
+        //     return NewsAggregatorService::createWithDefaultSources();
+        // });
     }
 
     /**
@@ -50,6 +44,6 @@ class NewsServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Register commands in the console kernel instead of here
     }
 }

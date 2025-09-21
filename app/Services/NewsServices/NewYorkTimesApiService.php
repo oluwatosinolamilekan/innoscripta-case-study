@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\Log;
 class NewYorkTimesApiService extends BaseNewsSource
 {
     /**
+     * The base URL for New York Times API.
+     *
+     * @var string
+     */
+    private const BASE_URL = 'https://api.nytimes.com/svc';
+
+    /**
      * The API secret.
      *
      * @var string
@@ -22,11 +29,11 @@ class NewYorkTimesApiService extends BaseNewsSource
      * @param string|null $apiSecret
      * @return void
      */
-    public function __construct(string $apiKey = null, string $apiSecret = null)
+    public function __construct(?string $apiKey = null, ?string $apiSecret = null)
     {
         parent::__construct($apiKey ?? config('services.nyt.key'));
         $this->apiSecret = $apiSecret ?? config('services.nyt.secret');
-        $this->baseUrl = 'https://api.nytimes.com/svc';
+        $this->baseUrl = self::BASE_URL;
     }
 
     /**
@@ -67,16 +74,20 @@ class NewYorkTimesApiService extends BaseNewsSource
             }
 
             $data = $response->json();
+            
+            // Log the API response to a JSON file with request parameters
+            $this->logResponseToJson('articles', $data, [
+                'request' => [
+                    'params' => $params,
+                    'endpoint' => '/topstories/v2/' . ($params['section'] ?? 'home') . '.json',
+                    'method' => 'GET',
+                    'api_secret' => '***API_SECRET_HIDDEN***'
+                ]
+            ]);
             $articles = [];
 
             // Get or create the source
-            $source = Source::firstOrCreate([
-                'slug' => 'new-york-times',
-                'api_name' => $this->getSourceName(),
-            ], [
-                'name' => $this->getSourceName(),
-                'url' => 'https://www.nytimes.com',
-            ]);
+            $source = $this->getOrCreateSource('new-york-times', 'https://www.nytimes.com');
 
             foreach ($data['results'] as $article) {
                 $imageUrl = null;
@@ -169,16 +180,20 @@ class NewYorkTimesApiService extends BaseNewsSource
             }
 
             $data = $response->json();
+            
+            // Log the API response to a JSON file with request parameters
+            $this->logResponseToJson('articles', $data, [
+                'request' => [
+                    'params' => $params,
+                    'endpoint' => '/topstories/v2/' . ($params['section'] ?? 'home') . '.json',
+                    'method' => 'GET',
+                    'api_secret' => '***API_SECRET_HIDDEN***'
+                ]
+            ]);
             $articles = [];
 
             // Get or create the source
-            $source = Source::firstOrCreate([
-                'slug' => 'new-york-times',
-                'api_name' => $this->getSourceName(),
-            ], [
-                'name' => $this->getSourceName(),
-                'url' => 'https://www.nytimes.com',
-            ]);
+            $source = $this->getOrCreateSource('new-york-times', 'https://www.nytimes.com');
 
             foreach ($data['response']['docs'] as $article) {
                 $imageUrl = null;

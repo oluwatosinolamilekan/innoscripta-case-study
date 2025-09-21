@@ -7,6 +7,7 @@ use App\Models\Source;
 use App\Models\Article;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use App\Services\Factories\NewsSourcesFactory;
 use App\Services\Contracts\NewsSourceInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -28,6 +29,23 @@ class NewsAggregatorService
     public function __construct(array $sources = [])
     {
         $this->sources = $sources;
+    }
+    
+    /**
+     * Create a new NewsAggregatorService with sources from the factory.
+     *
+     * @return static
+     */
+    public static function createWithDefaultSources(): self
+    {
+        $instance = new static();
+        
+        // Use the factory to create sources
+        foreach (NewsSourcesFactory::createAll() as $source) {
+            $instance->addSource($source);
+        }
+        
+        return $instance;
     }
 
     /**
