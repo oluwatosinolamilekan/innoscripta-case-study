@@ -178,6 +178,10 @@ abstract class BaseNewsSource implements NewsSourceInterface
      */
     protected function logResponseToJson(string $endpoint, array $data, array $additionalMetadata = []): bool
     {
+        // API response logging has been disabled
+        return true;
+        
+        /* Original implementation commented out
         try {
             $sourceName = $this->getSourceName();
             $timestamp = now()->format('Y-m-d_H-i-s');
@@ -235,6 +239,7 @@ abstract class BaseNewsSource implements NewsSourceInterface
             ]);
             return false;
         }
+        */
     }
 
     /**
@@ -246,17 +251,7 @@ abstract class BaseNewsSource implements NewsSourceInterface
     protected function outputToConsole(string $message): void
     {
         if (app()->runningInConsole()) {
-            // Check if we're in a Laravel command context
-            if (isset($_SERVER['argv'][0]) && strpos($_SERVER['argv'][0], 'artisan') !== false) {
-                // If we're in an Artisan command, try to use the command's output methods
-                $command = app('Illuminate\Console\Command');
-                if ($command) {
-                    $command->info($message);
-                    return;
-                }
-            }
-            
-            // Fallback to plain echo
+            // Fallback to plain echo since we can't reliably access the command instance
             echo PHP_EOL . $message . PHP_EOL;
         }
     }

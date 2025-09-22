@@ -75,15 +75,16 @@ class NewYorkTimesApiService extends BaseNewsSource
 
             $data = $response->json();
             
-            // Log the API response to a JSON file with request parameters
-            $this->logResponseToJson('articles', $data, [
-                'request' => [
-                    'params' => $params,
-                    'endpoint' => '/topstories/v2/' . ($params['section'] ?? 'home') . '.json',
-                    'method' => 'GET',
-                    'api_secret' => '***API_SECRET_HIDDEN***'
-                ]
-            ]);
+            
+            // API response logging has been disabled
+            // $this->logResponseToJson('articles', $data, [
+            //     'request' => [
+            //         'params' => $params,
+            //         'endpoint' => '/topstories/v2/' . ($params['section'] ?? 'home') . '.json',
+            //         'method' => 'GET',
+            //         'api_secret' => '***API_SECRET_HIDDEN***'
+            //     ]
+            // ]);
             $articles = [];
 
             // Get or create the source
@@ -181,15 +182,15 @@ class NewYorkTimesApiService extends BaseNewsSource
 
             $data = $response->json();
             
-            // Log the API response to a JSON file with request parameters
-            $this->logResponseToJson('articles', $data, [
-                'request' => [
-                    'params' => $params,
-                    'endpoint' => '/topstories/v2/' . ($params['section'] ?? 'home') . '.json',
-                    'method' => 'GET',
-                    'api_secret' => '***API_SECRET_HIDDEN***'
-                ]
-            ]);
+            // API response logging has been disabled
+            // $this->logResponseToJson('articles', $data, [
+            //     'request' => [
+            //         'params' => $params,
+            //         'endpoint' => '/topstories/v2/' . ($params['section'] ?? 'home') . '.json',
+            //         'method' => 'GET',
+            //         'api_secret' => '***API_SECRET_HIDDEN***'
+            //     ]
+            // ]);
             $articles = [];
 
             // Get or create the source

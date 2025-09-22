@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UserPreferenceRequest extends FormRequest
 {
@@ -57,21 +57,7 @@ class UserPreferenceRequest extends FormRequest
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
-            // Custom validation logic for categories
-            if ($this->has('categories')) {
-                $categories = $this->input('categories');
-                
-                // Check if categories exist in the database
-                $existingCategories = \App\Models\Category::whereIn('name', $categories)->pluck('name')->toArray();
-                $invalidCategories = array_diff($categories, $existingCategories);
-                
-                if (!empty($invalidCategories)) {
-                    $validator->errors()->add(
-                        'categories', 
-                        'The following categories do not exist: ' . implode(', ', $invalidCategories)
-                    );
-                }
-            }
+            // No custom validation needed for categories as we accept any string values
         });
     }
 }

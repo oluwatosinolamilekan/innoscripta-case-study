@@ -25,10 +25,12 @@ class AuthController extends Controller
     public function login(LoginRequest $request): JsonResponse
     {
         try {
-            if (!Auth::attempt($request->only('email', 'password'))) {
+            // Using 'web' guard explicitly because the default 'api' guard uses Sanctum driver
+            // which doesn't support the attempt() method. The 'web' guard uses session driver that has this method.
+            if (!Auth::guard('web')->attempt($request->only('email', 'password'))) {
                 return $this->errorResponse('Invalid login credentials', 401);
             }
-
+            
             $user = User::where('email', $request->email)->firstOrFail();
             $token = $user->createToken('auth_token')->plainTextToken;
 

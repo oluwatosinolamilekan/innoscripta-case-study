@@ -63,14 +63,15 @@ class GuardianApiService extends BaseNewsSource
 
             $data = $response->json();
             
-            // Log the API response to a JSON file with request parameters
-            $this->logResponseToJson('articles', $data, [
-                'request' => [
-                    'params' => $params,
-                    'endpoint' => '/search',
-                    'method' => 'GET'
-                ]
-            ]);
+            
+            // API response logging has been disabled
+            // $this->logResponseToJson('articles', $data, [
+            //     'request' => [
+            //         'params' => $params,
+            //         'endpoint' => '/search',
+            //         'method' => 'GET'
+            //     ]
+            // ]);
          
             $articles = [];
 
@@ -160,14 +161,14 @@ class GuardianApiService extends BaseNewsSource
 
             $data = $response->json();
             
-            // Log the API response to a JSON file with request parameters
-            $this->logResponseToJson('articles', $data, [
-                'request' => [
-                    'params' => $params,
-                    'endpoint' => '/search',
-                    'method' => 'GET'
-                ]
-            ]);
+            // API response logging has been disabled
+            // $this->logResponseToJson('articles', $data, [
+            //     'request' => [
+            //         'params' => $params,
+            //         'endpoint' => '/search',
+            //         'method' => 'GET'
+            //     ]
+            // ]);
             $articles = [];
 
             // Get or create the source

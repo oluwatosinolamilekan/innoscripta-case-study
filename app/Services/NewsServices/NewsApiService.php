@@ -84,15 +84,15 @@ class NewsApiService extends BaseNewsSource
 
             $data = $response->json();
             
-            // Log the API response to a JSON file with request parameters
-            $this->logResponseToJson('articles', $data, [
-                'request' => [
-                    'params' => $params,
-                    'endpoint' => '/top-headlines',
-                    'method' => 'GET',
-                    'headers' => ['X-Api-Key' => '***API_KEY_HIDDEN***']
-                ]
-            ]);
+            // API response logging has been disabled
+            // $this->logResponseToJson('articles', $data, [
+            //     'request' => [
+            //         'params' => $params,
+            //         'endpoint' => '/top-headlines',
+            //         'method' => 'GET',
+            //         'headers' => ['X-Api-Key' => '***API_KEY_HIDDEN***']
+            //     ]
+            // ]);
             $articles = [];
 
             // Get or create the source
@@ -152,15 +152,15 @@ class NewsApiService extends BaseNewsSource
 
             $data = $response->json();
             
-            // Log the API response to a JSON file with request parameters
-            $this->logResponseToJson('articles', $data, [
-                'request' => [
-                    'params' => $params,
-                    'endpoint' => '/top-headlines',
-                    'method' => 'GET',
-                    'headers' => ['X-Api-Key' => '***API_KEY_HIDDEN***']
-                ]
-            ]);
+            // API response logging has been disabled
+            // $this->logResponseToJson('articles', $data, [
+            //     'request' => [
+            //         'params' => $params,
+            //         'endpoint' => '/top-headlines',
+            //         'method' => 'GET',
+            //         'headers' => ['X-Api-Key' => '***API_KEY_HIDDEN***']
+            //     ]
+            // ]);
             $sources = [];
 
             foreach ($data['sources'] as $source) {
@@ -215,15 +215,15 @@ class NewsApiService extends BaseNewsSource
 
             $data = $response->json();
             
-            // Log the API response to a JSON file with request parameters
-            $this->logResponseToJson('articles', $data, [
-                'request' => [
-                    'params' => $params,
-                    'endpoint' => '/top-headlines',
-                    'method' => 'GET',
-                    'headers' => ['X-Api-Key' => '***API_KEY_HIDDEN***']
-                ]
-            ]);
+            // API response logging has been disabled
+            // $this->logResponseToJson('articles', $data, [
+            //     'request' => [
+            //         'params' => $params,
+            //         'endpoint' => '/top-headlines',
+            //         'method' => 'GET',
+            //         'headers' => ['X-Api-Key' => '***API_KEY_HIDDEN***']
+            //     ]
+            // ]);
             $articles = [];
 
             // Get or create the source
