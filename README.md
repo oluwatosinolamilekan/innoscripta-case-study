@@ -51,9 +51,8 @@ This script will:
 1. Install dependencies
 2. Create the .env file
 3. Generate an application key
-4. Create the MySQL database
-5. Run migrations
-6. Prompt you for API keys and update the .env file
+4. Run migrations
+5. Prompt you for API keys and update the .env file
 
 
 1. Clone the repository:
@@ -87,17 +86,12 @@ DB_USERNAME=your_mysql_username
 DB_PASSWORD=your_mysql_password
 ```
 
-6. Create the MySQL database:
-```
-mysql -u your_mysql_username -p -e "CREATE DATABASE innoscripta"
-```
-
-7. Run migrations:
+6. Run migrations:
 ```
 php artisan migrate
 ```
 
-8. Add your API keys to the `.env` file:
+7. Add your API keys to the `.env` file:
 ```
 NEWSAPI_KEY=your_newsapi_key
 GUARDIAN_API_KEY=your_guardian_api_key
@@ -105,7 +99,7 @@ NYT_API_KEY=your_nyt_api_key
 NYT_API_SECRET=your_nyt_api_secret
 ```
 
-9. Seed the database with default users:
+8. Seed the database with default users:
 ```
 php artisan db:seed --class=UserSeeder
 ```
