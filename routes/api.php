@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\ArticleController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\PersonalizedArticleController;
 use App\Http\Controllers\Api\SourceController;
 use App\Http\Controllers\Api\TestController;
 use App\Http\Controllers\Api\UserPreferenceController;
@@ -44,5 +45,5 @@ Route::middleware('auth:sanctum')->group(function () {
     // User preferences
     Route::get('/preferences', [UserPreferenceController::class, 'index']);
     Route::put('/preferences', [UserPreferenceController::class, 'update']);
-    Route::get('/preferences/articles', [UserPreferenceController::class, 'articles']);
+    Route::get('/preferences/articles', [PersonalizedArticleController::class, 'index']);
 });
