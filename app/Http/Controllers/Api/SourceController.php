@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use Throwable;
 use App\Models\Source;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Resources\SourceResource;
 use App\Services\NewsAggregatorService;
@@ -15,22 +13,11 @@ use App\Http\Controllers\Api\BaseApiController as Controller;
 class SourceController extends Controller
 {
     /**
-     * The news aggregator service instance.
-     *
-     * @var NewsAggregatorService
-     */
-    protected $aggregator;
-
-    /**
      * Create a new controller instance.
-     *
-     * @param NewsAggregatorService $aggregator
-     * @return void
      */
-    public function __construct(NewsAggregatorService $aggregator)
-    {
-        $this->aggregator = $aggregator;
-    }
+    public function __construct(
+        protected readonly NewsAggregatorService $aggregator
+    ) {}
 
     /**
      * Get all sources.
@@ -39,12 +26,8 @@ class SourceController extends Controller
      */
     public function index(): JsonResponse
     {
-        try {
-            $sources = $this->aggregator->getSourcesFromDatabase();
-            return $this->successResponse(SourceResource::collection($sources));
-        } catch (Throwable $e) {
-            return $this->handleException($e);
-        }
+        $sources = $this->aggregator->getSourcesFromDatabase();
+        return $this->successResponse(SourceResource::collection($sources));
     }
 
     /**
@@ -52,25 +35,21 @@ class SourceController extends Controller
      *
      * @param int $id
      * @param ArticleFilterRequest $request
-     * @return \Illuminate\Http\Resources\Json\JsonResource|\Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\Resources\Json\JsonResource
      */
     public function articles(int $id, ArticleFilterRequest $request)
     {
-        try {
-            // Validate that the source exists
-            $this->validateSource($id);
-            
-            $filters = $request->validated();
+        // Validate that the source exists
+        $this->validateSource($id);
+        
+        $filters = $request->validated();
 
-            // Add source ID to filters
-            $filters['source_id'] = $id;
+        // Add source ID to filters
+        $filters['source_id'] = $id;
 
-            $articles = $this->aggregator->getArticlesFromDatabase($filters);
+        $articles = $this->aggregator->getArticlesFromDatabase($filters);
 
-            return new ArticleCollection($articles);
-        } catch (Throwable $e) {
-            return $this->handleException($e);
-        }
+        return new ArticleCollection($articles);
     }
     
     /**
